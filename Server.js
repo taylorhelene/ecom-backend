@@ -56,17 +56,3 @@ const adminAuth = (req, res, next) => {
     if (req.user.role !== "admin") return res.status(403).json({ message: "Admin access required" });
     next();
 };
-  
-// Get All Products
-app.get("/products", async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
-});
-
-
-// Add Product (Admin Only)
-app.post("/products/add", auth, adminAuth, async (req, res) => {
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).json({ message: "Product added!" });
-});
