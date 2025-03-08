@@ -7,4 +7,4 @@ const UserSchema = new mongoose.Schema({
     role : { type: String, default: "user" } // "admin" or "user"
 })
 const User = mongoose.model("User", UserSchema);
-module.exports(User)
+module.exports={User}

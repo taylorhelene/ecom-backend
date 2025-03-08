@@ -1,10 +1,12 @@
-require('dotenv').config;
+const dotenv = require('dotenv');
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-const User = require('./User')
+dotenv.config();
+
+const {User} = require('./User')
 
 const salt = bcrypt.genSaltSync(10);
 const app = express();
@@ -16,11 +18,16 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // Register Route
 app.post('/register',async(req,res)=>{
-    const { email, password, role } = req.body;
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const user = new User({ email, password: hashedPassword, role });
-    await user.save();
-    res.status(201).json({ message: "User registered successfully!" });
+    const { email, password } = req.body;
+    
+    if (User.find(user => user.email === email)) {
+      return res.status(400).json({ message: "User already exists" });
+    }else{
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const user = new User({ email, password: hashedPassword});
+      await user.save();
+      res.status(201).json({ message: "User registered successfully!" });
+    }
 })
 
 // Login Route
@@ -33,7 +40,7 @@ app.post('/login',async(req,res)=>{
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials!" });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ email: user.email }, "secret", { expiresIn: "1h" });
     res.json({ token, role: user.role });
 })
 
