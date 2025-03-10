@@ -14,43 +14,43 @@
   "products": [
     {
       "id": "hdmdu0t80yjkfqselfc",
-      "name": "shoes",
-      "stock": 1,
-      "price": 399.99,
-      "shortDesc": "Nulla facilisi. Curabitur at lacus ac velit ornare lobortis.",
-      "description": "Cras sagittis. Praesent nec nisl a purus blandit viverra. Ut leo. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Fusce a quam."
+      "name": "Cartoon cake",
+      "stock": 6,
+      "price": 2000,
+      "shortDesc": "Customizable cartoon cakes.",
+      "description": "These cartoon cakes are customisable with different flavours and fillings."
     },
     {
       "id": "3dc7fiyzlfmkfqseqam",
-      "name": "bags",
+      "name": "Cream donut",
       "stock": 18,
-      "price": 299.99,
-      "shortDesc": "Nulla facilisi. Curabitur at lacus ac velit ornare lobortis.",
-      "description": "Cras sagittis. Praesent nec nisl a purus blandit viverra. Ut leo. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Fusce a quam."
+      "price": 2000,
+      "shortDesc": "Cream donut glazed with choco glaze.",
+      "description": "Cream donut has different filling and different types of choco glaze. The order comes in boxes with siX donuts"
     },
     {
       "id": "aoe8wvdxvrkfqsew67",
-      "name": "shirts",
+      "name": "Vanilla Caramel Puffs",
       "stock": 15,
-      "price": 149.99,
-      "shortDesc": "Nulla facilisi. Curabitur at lacus ac velit ornare lobortis.",
-      "description": "Cras sagittis. Praesent nec nisl a purus blandit viverra. Ut leo. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Fusce a quam."
+      "price": 2000,
+      "shortDesc": "Puffs with caramel filling",
+      "description": "Vanilla puffs with salted caramel filling.The order comes in boxes with siX donuts"
     },
     {
       "id": "bmfrurdkswtkfqsf15j",
-      "name": "shorts",
-      "stock": 5,
-      "price": 109.99,
-      "shortDesc": "Nulla facilisi. Curabitur at lacus ac velit ornare lobortis.",
-      "description": "Cras sagittis. Praesent nec nisl a purus blandit viverra. Ut leo. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Fusce a quam."
+      "name": "Chocolate Crispy Rolls",
+      "stock": 6,
+      "price": 1500,
+      "shortDesc": "Chocolate crispy Thousand Layer Rolls.",
+      "description": "Chocolate crispy Thousand Layer Crepe Rolls. They are coated with peanuts for the crunch"
     },
     {
       "id": "o4um39z79sm5zb0ak4",
-      "name": "hot pepper",
-      "price": "10",
-      "stock": "4",
-      "shortDesc": "jalepeno",
-      "description": "this is hot pepper"
+      "name": "Chocolate mousse cake",
+      "price": 2000,
+      "stock": 6,
+      "shortDesc": "chocolate mouse cake with chocolate glaze",
+      "description": "This is a Chocolate mousse cake that is glazed with chocolate ganache"
     }
   ]
 }
