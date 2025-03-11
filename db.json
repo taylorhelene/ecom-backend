@@ -25,6 +25,7 @@
       "name": "Cream donut",
       "stock": 18,
       "price": 2000,
+      "img":"./",
       "shortDesc": "Cream donut glazed with choco glaze.",
       "description": "Cream donut has different filling and different types of choco glaze. The order comes in boxes with siX donuts"
     },
