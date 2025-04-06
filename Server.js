@@ -93,7 +93,7 @@ let encodingpassword= `174379${process.env.passkey}${Timestampstring}`
 let base64PasswordEncoded = Buffer.from(encodingpassword).toString('base64');
 let CheckoutRequestID = "";
 
-app.post('/lipa', async (req, res) => {
+app.post('/payment', async (req, res) => {
 
   // create callback url with ngrok
   const callback_url = await ngrok.connect(port);
@@ -135,10 +135,10 @@ app.post('/lipa', async (req, res) => {
             "Password": base64PasswordEncoded,
             "Timestamp": Timestampstring,
             "TransactionType": "CustomerPayBillOnline",
-            "Amount": 1,
-            "PartyA": process.env.number,
+            "Amount": req.body.amount,
+            "PartyA": req.body.number,
             "PartyB": 174379,
-            "PhoneNumber": process.env.number,
+            "PhoneNumber": req.body.number,
             "CallBackURL": `${callback_url}/payment-callback/${Order_ID}`,
             "AccountReference": "CompanyXLTD",
             "TransactionDesc": "Payment of X" }))
@@ -173,7 +173,7 @@ app.post('/payment-callback/', async(req, res) => {
       .end(response => {
         if (response.error) throw new Error(response.error);
         console.log(response.body);
-        res.status(200).send('Payment processed.');
+        res.status(200).send(`${CheckoutRequestID}`);
       });
   
 });
