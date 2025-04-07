@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const unirest = require('unirest');
 const ngrok = require('ngrok');
+const nodemailer = require('nodemailer'); 
 dotenv.config();
 
 const {User} = require('./User')
@@ -79,7 +80,7 @@ const generateTimestamp = () => {
       // Your hostname if you want your hostname to be the same everytime
       hostname: "",
       // Your app port
-      addr: port,
+      addr: process.env.port,
   });
 
   console.log(`Listening on url ${url}`);
@@ -95,15 +96,16 @@ let CheckoutRequestID = "";
 
 app.post('/payment', async (req, res) => {
 
+  try {
+
   // create callback url with ngrok
   const callback_url = await ngrok.connect(port);
   const api = ngrok.getApi();
   await api.listTunnels();
   console.log("callback ",callback_url)
- 
+  const { amount, number, Order_ID } = req.body;
   //encode token
   const base64AuthEncoded = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64'); //Base64 Encode (Consumer Key : Consumer Secret)
-  const {Order_ID} = req.body
 
   //promise to generate token
   let getToken=()=>{
@@ -135,23 +137,30 @@ app.post('/payment', async (req, res) => {
             "Password": base64PasswordEncoded,
             "Timestamp": Timestampstring,
             "TransactionType": "CustomerPayBillOnline",
-            "Amount": req.body.amount,
-            "PartyA": req.body.number,
+            "Amount": amount,
+            "PartyA": number,
             "PartyB": 174379,
-            "PhoneNumber": req.body.number,
+            "PhoneNumber": number,
             "CallBackURL": `${callback_url}/payment-callback/${Order_ID}`,
             "AccountReference": "CompanyXLTD",
             "TransactionDesc": "Payment of X" }))
     .end(response2 => {
             if (response2.error) throw new Error(response2.error);
               CheckoutRequestID=response2.body.CheckoutRequestID;
-              res.send(response2.body)
-                        
-               });
+              res.send({ 
+                ...response2.body,
+                Order_ID: Order_ID 
+              });  
+
+          });
     })
+
+  } catch (error) {
+    res.status(500).send({ error: 'Payment initiation failed' });
+  }
 });
 
-app.post('/payment-callback/', async(req, res) => {
+app.post('/payment-callback/:orderId', async(req, res) => {
   // Handle payment callback logic here
   // Verify the payment and update your application's records
   // Respond with a success message
@@ -168,14 +177,63 @@ app.post('/payment-callback/', async(req, res) => {
           "BusinessShortCode": 174379,
           "Password": base64PasswordEncoded,
           "Timestamp": Timestampstring,
-          "CheckoutRequestID": `${CheckoutRequestID}`,
+          "CheckoutRequestID": req.body.CheckoutRequestID,
       }))
       .end(response => {
-        if (response.error) throw new Error(response.error);
-        console.log(response.body);
-        res.status(200).send(`${CheckoutRequestID}`);
+        if (response.error) {
+          res.status(500).send({ error: response.error });
+        } else {
+          res.status(200).send({
+            CheckoutRequestID: req.body.CheckoutRequestID,
+            ResultCode: response.body.ResultCode,
+            ResultDesc: response.body.ResultDesc
+          });
+        }
+        /* CORRECT RESPONSE BODY{
+  ResponseCode: '0',
+  ResponseDescription: 'The service request has been accepted successsfully',
+  MerchantRequestID: '7071-4170-a0e4-8345632bad441412267',
+  CheckoutRequestID: 'ws_CO_04072024151523730722724071',
+  ResultCode: '1032',
+  ResultDesc: 'The service request is processed successfully.'
+}*/
       });
   
+});
+
+// Email configuration (update with your email service details)
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+        user: process.env.nodemailergmail,
+        pass: process.env.nodemailerpass,
+  },
+});
+
+app.post('/send-receipt', async (req, res) => {
+  const { email, checkoutId, totalCost, cartItems, orderId } = req.body;
+
+  const itemsList = cartItems.map(item => 
+    `${item.product.name} - ${item.amount} x ${item.product.price} = ${item.amount * item.product.price}`
+  ).join('\n');
+
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: `Order Receipt #${orderId}`,
+    text: `Thank you for your purchase!\n\nOrder ID: ${orderId}\nCheckout ID: ${checkoutId}\n\nItems:\n${itemsList}\n\nTotal: ${totalCost}\n\nPayment Status: Completed`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'Receipt sent successfully' });
+  } catch (error) {
+    console.error('Email error:', error);
+    res.status(500).send({ error: 'Failed to send receipt' });
+  }
 });
 
 app.listen(3001, () => console.log("Server running on port 3001"));
