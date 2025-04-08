@@ -163,7 +163,7 @@ app.post('/payment', async (req, res) => {
   }
 });
 
-app.post('/payment-callback/:orderId', async(req, res) => {
+app.post('/payment-callback/', async(req, res) => {
   // Handle payment callback logic here
   // Verify the payment and update your application's records
   // Respond with a success message

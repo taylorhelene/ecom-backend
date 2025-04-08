@@ -15,7 +15,7 @@
     {
       "id": "hdmdu0t80yjkfqselfc",
       "name": "Cartoon cake",
-      "stock": 10,
+      "stock": 9,
       "price": 1,
       "img": "https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/cartooncake.jpg",
       "shortDesc": "Customizable cartoon cakes.",
