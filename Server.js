@@ -80,7 +80,7 @@ const generateTimestamp = () => {
       // Your hostname if you want your hostname to be the same everytime
       hostname: "",
       // Your app port
-      addr: process.env.port,
+      addr: 3001,
   });
 
   console.log(`Listening on url ${url}`);
@@ -99,10 +99,9 @@ app.post('/payment', async (req, res) => {
   try {
 
   // create callback url with ngrok
-  const callback_url = await ngrok.connect(port);
+  const callback_url = await ngrok.connect(3001);
   const api = ngrok.getApi();
   await api.listTunnels();
-  console.log("callback ",callback_url)
   const { amount, number, Order_ID } = req.body;
   //encode token
   const base64AuthEncoded = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64'); //Base64 Encode (Consumer Key : Consumer Secret)
@@ -128,6 +127,7 @@ app.post('/payment', async (req, res) => {
     //get token
     let jsonstring = response.body
     tokken = jsonstring.access_token;
+    console.log(tokken)
 
     // this request is from the M-Pesa Express Api Simulate option
     unirest('POST', 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest')
@@ -146,6 +146,8 @@ app.post('/payment', async (req, res) => {
             "TransactionDesc": "Payment of X" }))
     .end(response2 => {
             if (response2.error) throw new Error(response2.error);
+            console.log(response2)
+
               CheckoutRequestID=response2.body.CheckoutRequestID;
               res.send({ 
                 ...response2.body,
@@ -157,6 +159,7 @@ app.post('/payment', async (req, res) => {
 
   } catch (error) {
     res.status(500).send({ error: 'Payment initiation failed' });
+    console.log("here",error)
   }
 });
 

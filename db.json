@@ -15,9 +15,9 @@
     {
       "id": "hdmdu0t80yjkfqselfc",
       "name": "Cartoon cake",
-      "stock": 6,
-      "price": 2000,
-      "img":"https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/cartooncake.jpg",
+      "stock": 10,
+      "price": 1,
+      "img": "https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/cartooncake.jpg",
       "shortDesc": "Customizable cartoon cakes.",
       "description": "These cartoon cakes are customisable with different flavours and fillings."
     },
@@ -26,7 +26,7 @@
       "name": "Cream donut",
       "stock": 18,
       "price": 2000,
-      "img":"https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/creamdonut.jpg",
+      "img": "https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/creamdonut.jpg",
       "shortDesc": "Cream donut glazed with choco glaze.",
       "description": "Cream donut has different filling and different types of choco glaze. The order comes in boxes with siX donuts"
     },
@@ -35,7 +35,7 @@
       "name": "Vanilla Caramel Puffs",
       "stock": 15,
       "price": 2000,
-      "img":"https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/puffs.jpg",
+      "img": "https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/puffs.jpg",
       "shortDesc": "Puffs with caramel filling",
       "description": "Vanilla puffs with salted caramel filling.The order comes in boxes with siX donuts"
     },
@@ -44,7 +44,7 @@
       "name": "Chocolate Crispy Rolls",
       "stock": 6,
       "price": 1500,
-      "img":"https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/rolls.jpg",
+      "img": "https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/rolls.jpg",
       "shortDesc": "Chocolate crispy Thousand Layer Rolls.",
       "description": "Chocolate crispy Thousand Layer Crepe Rolls. They are coated with peanuts for the crunch"
     },
@@ -53,7 +53,7 @@
       "name": "Chocolate mousse cake",
       "price": 2000,
       "stock": 6,
-      "img":"https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/mousse.jpg",
+      "img": "https://raw.githubusercontent.com/taylorhelene/ecom-backend/refs/heads/main/public/mousse.jpg",
       "shortDesc": "chocolate mouse cake with chocolate glaze",
       "description": "This is a Chocolate mousse cake that is glazed with chocolate ganache"
     }
