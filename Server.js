@@ -224,8 +224,9 @@ app.post('/send-receipt', async (req, res) => {
   ).join('\n');
 
   const mailOptions = {
-    from: 'your-email@gmail.com',
-    to: email,
+    from: `Ecommerce receipt account: ${process.env.nodemailergmail}`,
+    to: process.env.nodemailergmail,
+    cc: email,
     subject: `Order Receipt #${orderId}`,
     text: `Thank you for your purchase!\n\nOrder ID: ${orderId}\nCheckout ID: ${checkoutId}\n\nItems:\n${itemsList}\n\nTotal: ${totalCost}\n\nPayment Status: Completed`
   };
@@ -238,5 +239,30 @@ app.post('/send-receipt', async (req, res) => {
     res.status(500).send({ error: 'Failed to send receipt' });
   }
 });
+
+app.post('/contact', async (req, res) => {
+  async function main() {
+    try {
+      // Send mail with defined transport object
+      const info = await transporter.sendMail({
+        from: `Ecommerce contact account: ${process.env.nodemailergmail}`, 
+        to: process.env.nodemailergmail, 
+        cc: req.body.email, 
+        subject: req.body.subject,
+        text: req.body.message, 
+        html: `<b>I am contacting you from your contact page. My name is ${req.body.name}. My email is ${req.body.email}. ${req.body.message}. <br></br>This message was delivered from my ecommerce contact form.</b>`,
+      });
+      
+      console.log("Message sent: %s", info.messageId);
+      res.status(200).json({ message: 'Message sent successfully', messageId: info.messageId });
+    } catch (error) {
+      console.error('Email sending error:', error);
+      res.status(500).json({ error: 'Failed to send message' });
+    }
+  }
+  
+  main();
+});
+
 
 app.listen(3001, () => console.log("Server running on port 3001"));
