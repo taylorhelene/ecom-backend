@@ -224,7 +224,7 @@ app.post('/send-receipt', async (req, res) => {
   ).join('\n');
 
   const mailOptions = {
-    from: `Ecommerce receipt account: ${process.env.nodemailergmail}`,
+    from: `Ecommerce receipt account:<${process.env.nodemailergmail}>`,
     to: process.env.nodemailergmail,
     cc: email,
     subject: `Order Receipt #${orderId}`,
@@ -245,12 +245,12 @@ app.post('/contact', async (req, res) => {
     try {
       // Send mail with defined transport object
       const info = await transporter.sendMail({
-        from: `Ecommerce contact account: ${process.env.nodemailergmail}`, 
+        from: `Ecommerce contact account:<${process.env.nodemailergmail}>`, 
         to: process.env.nodemailergmail, 
         cc: req.body.email, 
         subject: req.body.subject,
         text: req.body.message, 
-        html: `<b>I am contacting you from your contact page. My name is ${req.body.name}. My email is ${req.body.email}. ${req.body.message}. <br></br>This message was delivered from my ecommerce contact form.</b>`,
+        html: `<b>I am contacting you from your contact page. My name is ${req.body.name}. My email is ${req.body.email}. ${req.body.message}. <br></br>This message was delivered from my ecommerce contact form. A copy has been sent to the sender.</b>`,
       });
       
       console.log("Message sent: %s", info.messageId);
