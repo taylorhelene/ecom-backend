@@ -19,10 +19,17 @@ app.use(cors());
 
 // Proxy requests to json-server-auth
 app.use(
-  ['/products', '/users'], // Add other json-server-auth routes as needed
+  ['/products', '/users'],
   createProxyMiddleware({
-    target: 'http://localhost:3002', // Internal json-server-auth port
+    target: 'http://localhost:3002',
     changeOrigin: true,
+    onError: (err, req, res) => {
+      console.error('Proxy error:', err);
+      res.status(500).json({ error: 'Failed to connect to products service' });
+    },
+    onProxyReq: (proxyReq) => {
+      console.log('Proxying request to json-server-auth:', proxyReq.path);
+    },
   })
 );
 
