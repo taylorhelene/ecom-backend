@@ -2,7 +2,7 @@
   "scripts": {
     "start:db": "./node_modules/.bin/json-server-auth ./db.json --port 3002",
     "start:server": "node Server",
-    "start": "concurrently \"npm run start:db\" \"npm run start:server\""
+    "start": "concurrently --restart-tries 5 --restart-after 5000 \"npm run start:db\" \"npm run start:server\""
   },
   "dependencies": {
     "@ngrok/ngrok": "^1.4.1",
