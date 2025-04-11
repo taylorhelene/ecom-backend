@@ -235,7 +235,6 @@ app.post('/send-receipt', async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.status(200).send({ message: 'Receipt sent successfully' });
   } catch (error) {
-    console.error('Email error:', error);
     res.status(500).send({ error: 'Failed to send receipt' });
   }
 });
@@ -256,7 +255,6 @@ app.post('/contact', async (req, res) => {
       console.log("Message sent: %s", info.messageId);
       res.status(200).json({ message: 'Message sent successfully', messageId: info.messageId });
     } catch (error) {
-      console.error('Email sending error:', error);
       res.status(500).json({ error: 'Failed to send message' });
     }
   }
