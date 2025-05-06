@@ -7,6 +7,8 @@ const cors = require("cors");
 const unirest = require('unirest');
 const ngrok = require('ngrok');
 const nodemailer = require('nodemailer'); 
+const fs = require('fs').promises;
+const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 dotenv.config();
 
@@ -15,23 +17,51 @@ const {User} = require('./User')
 const salt = bcrypt.genSaltSync(10);
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' })); 
 
-// Proxy requests to json-server-auth
-app.use(
-  ['/products', '/users'],
-  createProxyMiddleware({
-    target: 'http://localhost:3002',
-    changeOrigin: true,
-    onError: (err, req, res) => {
-      console.error('Proxy error:', err);
-      res.status(500).json({ error: 'Failed to connect to products service' });
-    },
-    onProxyReq: (proxyReq) => {
-      console.log('Proxying request to json-server-auth:', proxyReq.path);
-    },
-  })
-);
+
+// Load db.json
+const dbPath = path.join(__dirname, 'db.json');
+let db = { products: [], users: [] }; // Default empty data
+
+// Read db.json on startup
+async function loadDb() {
+  try {
+    const data = await fs.readFile(dbPath, 'utf8');
+    db = JSON.parse(data);
+    console.log('db.json loaded successfully');
+  } catch (error) {
+    console.error('Error loading db.json:', error);
+  }
+}
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'Express server running' });
+});
+
+// Products route
+app.get('/products', (req, res) => {
+  res.json(db.products || []);
+});
+
+// Optional: Support for updating products (e.g., for checkout stock updates)
+app.put('/products/:id', async (req, res) => {
+  const productId = parseInt(req.params.id);
+  const updatedProduct = req.body;
+
+  try {
+    db.products = db.products.map(p =>
+      p.id === productId ? { ...p, ...updatedProduct } : p
+    );
+    // Write back to db.json to persist changes
+    await fs.writeFile(dbPath, JSON.stringify(db, null, 2));
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({ error: 'Failed to update product' });
+  }
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI);
