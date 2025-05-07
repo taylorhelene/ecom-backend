@@ -1,9 +1,4 @@
 {
-  "scripts": {
-    "start:db": "./node_modules/.bin/json-server-auth ./db.json --port 3002",
-    "start:server": "node Server",
-    "start": "concurrently --restart-tries 3 --restart-after 5000 \"npm run start:db\" \"npm run start:server\""
-  },
   "dependencies": {
     "@ngrok/ngrok": "^1.4.1",
     "axios": "^1.7.9",
@@ -12,9 +7,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "http-proxy-middleware": "^3.0.5",
     "json-server": "^0.17.4",
-    "json-server-auth": "^2.1.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongodb": "^6.14.0",
@@ -22,8 +15,5 @@
     "ngrok": "^5.0.0-beta.2",
     "nodemailer": "^6.10.0",
     "unirest": "^0.6.0"
-  },
-  "devDependencies": {
-    "concurrently": "^9.1.2"
   }
 }

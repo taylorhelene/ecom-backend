@@ -9,7 +9,6 @@ const ngrok = require('ngrok');
 const nodemailer = require('nodemailer'); 
 const fs = require('fs').promises;
 const path = require('path');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 dotenv.config();
 
 const {User} = require('./User')
@@ -34,6 +33,9 @@ async function loadDb() {
     console.error('Error loading db.json:', error);
   }
 }
+
+// Initialize db
+loadDb();
 
 // Health check endpoint
 app.get('/health', (req, res) => {
